@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 import { Button } from "@/components/ui/button"
 import {
   BrowserRouter as Router,
@@ -64,5 +65,16 @@ function About() {
 function Users() {
   return <h2>Users</h2>;
 }
+=======
+import { BrowserRouter as Router } from "react-router-dom";
+import "./App.css";
+import AppRoutes from "./routes/app-routes";
+
+const App = () => (
+  <Router>
+    <AppRoutes />
+  </Router>
+);
+>>>>>>> main
 
 export default App;
