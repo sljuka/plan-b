@@ -1,17 +1,17 @@
 import useWalletInfo from "@/hooks/get-wallet"
+import { toSats } from "@/utils/sats"
 
 export const WalletInfo = () => {
     const { data: walletInfo, loading, error } = useWalletInfo()
 
-    console.log('AAA', walletInfo)
-    if (loading) return <div>Loading</div>
+    if (error) return <div>Error {error.message}</div>
 
-    if (error) return <div>Error</div>
+    if (loading || !walletInfo) return <div>Loading</div>
 
     return (
         <div className='pt-4 flex gap-4 flex-col'>
-            {/* <span>Balance: {walletInfo.balance}</span>
-            <span>Name: {walletInfo.name}</span> */}
+            <span>Balance: {toSats(walletInfo.balance)}</span>
+            <span>Name: {walletInfo.name}</span>
         </div>
     )
 }
