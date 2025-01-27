@@ -6,6 +6,7 @@ import {
   Link
 } from "react-router-dom";
 import './App.css'
+import { WalletInfo } from "./pages/wallet-info";
 
 function App() {
   return (
@@ -33,6 +34,9 @@ function App() {
         </Route>
         <Route path="/users">
           <Users />
+        </Route>
+        <Route path="/wallet">
+          <WalletInfo />
         </Route>
         <Route path="/">
           <Home />
