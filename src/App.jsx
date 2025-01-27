@@ -3,8 +3,13 @@ import reactLogo from './assets/react.svg'
 import viteLogo from '/vite.svg'
 import './App.css'
 
+import useWalletInfo from './hooks/get-wallet'
+
 function App() {
   const [count, setCount] = useState(0)
+  const walletId = "40c40a9400b248d0a44565adcec48567";
+  const { walletInfo, loading, error } = useWalletInfo(walletId);
+  console.log(walletInfo);
 
   return (
     <>
@@ -21,6 +26,9 @@ function App() {
         <button onClick={() => setCount((count) => count + 1)}>
           count is {count}
         </button>
+        <p>
+          Wallet Info: {loading ? 'Loading...' : error ? error.message : walletInfo?.name + " " + walletInfo?.balance}
+        </p>
         <p>
           Edit <code>src/App.jsx</code> and save to test HMR
         </p>
