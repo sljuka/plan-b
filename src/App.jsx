@@ -1,11 +1,16 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
+import { Button } from "@/components/ui/button"
+import {
+  BrowserRouter as Router,
+  Switch,
+  Route,
+  Link
+} from "react-router-dom";
 import './App.css'
 
 import useWalletInfo from './hooks/get-wallet'
 
 function App() {
+<<<<<<< HEAD
   const [count, setCount] = useState(0)
   const walletId = "40c40a9400b248d0a44565adcec48567";
   const { walletInfo, loading, error } = useWalletInfo(walletId);
@@ -37,7 +42,52 @@ function App() {
         Click on the Vite and React logos to learn more
       </p>
     </>
+=======
+  return (
+    <Router>
+      <form >
+        <nav>
+          <ul>
+            <li>
+              <Link to="/">Home</Link>
+            </li>
+            <li>
+              <Link to="/about">About</Link>
+            </li>
+            <li>
+              <Link to="/users">Users</Link>
+            </li>
+          </ul>
+        </nav>
+        <Button>Click me</Button>
+      </form>
+
+      <Switch>
+        <Route path="/about">
+          <About />
+        </Route>
+        <Route path="/users">
+          <Users />
+        </Route>
+        <Route path="/">
+          <Home />
+        </Route>
+      </Switch>
+    </Router>
+>>>>>>> upstream/main
   )
+}
+
+function Home() {
+  return <h2>Home</h2>;
+}
+
+function About() {
+  return <h2>About</h2>;
+}
+
+function Users() {
+  return <h2>Users</h2>;
 }
 
 export default App
