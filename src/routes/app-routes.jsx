@@ -5,9 +5,9 @@ import { Switch, Route } from "react-router-dom";
 
 const AppRoutes = () => (
   <Switch>
+    <Route path="/wallet" component={WalletInfo} />
+    <Route path="/home" component={Home} />
     <Route path="/" component={Onboarding} />
-    <Route exact path="/home" component={Home} />
-    <Route path="/wallet"><WalletInfo /></Route>
   </Switch>
 );
 
