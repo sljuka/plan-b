@@ -4,15 +4,15 @@ export default function BitcoinBalance({balance}) {
   const formattedBalance = balance.toFixed(8);
   const [whole, decimal] = formattedBalance.split(".");
 
-  const lastNonZeroIndex = decimal
+/*   const lastNonZeroIndex = decimal
     .split("")
     .reverse()
     .findIndex((char) => char !== "0");
   const significantDigits =
     decimal.length -
-    (lastNonZeroIndex === -1 ? decimal.length : lastNonZeroIndex);
+    (lastNonZeroIndex === -1 ? decimal.length : lastNonZeroIndex); */
 
-  const decimalParts = decimal.split("").map((digit, index) => {
+/*   const decimalParts = decimal.split("").map((digit, index) => {
     const isSignificant = index < significantDigits;
     return (
       <span
@@ -24,7 +24,7 @@ export default function BitcoinBalance({balance}) {
         {digit}
       </span>
     );
-  });
+  }); */
 
   return (
     <div className="bg-gradient-to-br from-gray-900 to-black p-4 md:p-8 rounded-2xl w-full shadow-lg border border-white/10">
@@ -35,9 +35,10 @@ export default function BitcoinBalance({balance}) {
       </div> */}
       <div className="text-center font-mono text-xl md:text-4xl tracking-wider">
         <span className="text-[#F89B2A] mr-2">₿</span>
-        <span className="text-white">{whole}</span>
+        <span className="text-white">{balance}</span>
+        {/* <span className="text-white">{whole}</span>
         <span className="text-white">.</span>
-        {decimalParts}
+        {decimalParts} */}
       </div>
     </div>
   );

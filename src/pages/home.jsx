@@ -1,9 +1,14 @@
 import { ArrowDownLeft, ArrowUpRight, Activity } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import BitcoinBalance from "@/components/bitcoin-balance";
+import useWalletInfo from "@/hooks/get-wallet";
 
 export default function Home() {
-  const balance = 0.01;
+  const { data: walletInfo} = useWalletInfo();
+
+  if (!walletInfo) {
+    return <div className="min-h-screen bg-black">Loading...</div>;
+  }
 
   return (
     <div className="min-h-screen bg-black text-white p-4 md:p-8">
@@ -17,7 +22,7 @@ export default function Home() {
         <main className="space-y-12">
           <section>
             <h2 className="text-xl mb-6 font-light">Current Balance</h2>
-            <BitcoinBalance balance={balance} />
+            <BitcoinBalance balance={walletInfo.balance} />
           </section>
 
           <section className="block">
