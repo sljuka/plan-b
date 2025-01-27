@@ -64,3 +64,7 @@
     @apply bg-background text-foreground;
   }
 }
+
+.hover\:bg-\[\#F89B2A\]\/90:hover {
+  box-shadow: 0 0 15px #f89b2a80;
+}
