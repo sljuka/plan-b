@@ -1,10 +1,10 @@
 import { useState, useEffect } from 'react';
 import axios from 'axios';
 
-const useWalletInfo = (walletId) => {
-    //todo read the api key and url from .env
-    const apiKey = "5942edd82aba459daf41f1636825b005";
-    const baseUrl = "https://thriftytoucan6.lnbits.com";
+const useWalletInfo = () => {
+    const API_KEY = import.meta.env.VITE_WALLET_ID;
+    const BASE_URL = import.meta.env.VITE_BASE_URL;
+
     const [walletInfo, setWalletInfo] = useState(null);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
@@ -13,10 +13,10 @@ const useWalletInfo = (walletId) => {
         const fetchWalletInfo = async () => {
             try {
                 const response = await axios({
-                    url: `${baseUrl}${"/api/v1/wallet"}`,
+                    url: `${BASE_URL}${"/api/v1/wallet"}`,
                     method: "GET",
                     headers: {
-                        'X-Api-Key': apiKey,
+                        'X-Api-Key': API_KEY,
                         'Content-Type': 'application/json',
                     },
                     data: undefined,
@@ -30,7 +30,7 @@ const useWalletInfo = (walletId) => {
         };
 
         fetchWalletInfo();
-    }, [walletId]);
+    }, []);
 
     return { walletInfo, loading, error };
 };
