@@ -1,20 +1,19 @@
-import { Button } from "@/components/ui/button"
-import {
-  BrowserRouter as Router,
-  Switch,
-  Route,
-  Link
-} from "react-router-dom";
-import './App.css'
+import { Button } from "@/components/ui/button";
+import { BrowserRouter as Router, Switch, Route, Link } from "react-router-dom";
+import "./App.css";
+import Onboarding from "./pages/onboarding";
 
 function App() {
   return (
     <Router>
-      <form >
+      <form>
         <nav>
           <ul>
             <li>
               <Link to="/">Home</Link>
+            </li>
+            <li>
+              <Link to="/onboard">Onboard</Link>
             </li>
             <li>
               <Link to="/about">About</Link>
@@ -31,6 +30,9 @@ function App() {
         <Route path="/about">
           <About />
         </Route>
+        <Route path="/onboard">
+          <Onboarding />
+        </Route>
         <Route path="/users">
           <Users />
         </Route>
@@ -39,7 +41,7 @@ function App() {
         </Route>
       </Switch>
     </Router>
-  )
+  );
 }
 
 function Home() {
@@ -54,4 +56,4 @@ function Users() {
   return <h2>Users</h2>;
 }
 
-export default App
+export default App;
