@@ -15,9 +15,14 @@ const RestoreWallet = () => {
       alert("Please enter a valid user ID");
       return;
     }
-    mutateAsync(walletId).then(() => {
-      navigate("/home");
-    });
+    mutateAsync(walletId)
+      .then(() => {
+        navigate("/home");
+      })
+      .catch((error) => {
+        //todo Display error message
+        alert(error.message);
+      });
   };
   return (
     <div>
