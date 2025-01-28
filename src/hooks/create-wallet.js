@@ -20,7 +20,13 @@ const useCreateWallet = () => {
           },
         });
 
-      //todo save the wallet id, inkey and adminkey in local storage
+      const userData = {
+        walletId: response.data.id,
+        adminKey: response.data.adminkey,
+        invoiceKey: response.data.inkey,
+      };
+
+      localStorage.setItem('userData', JSON.stringify(userData));
 
       return response.data;
     },
