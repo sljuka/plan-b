@@ -1,16 +1,13 @@
-import { Copy } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
-  DialogClose,
   DialogContent,
   DialogDescription,
-  DialogFooter,
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
-import { Label } from "@/components/ui/label";
 import { useState } from "react";
+import RegistrationForm from "@/forms/registration-form";
 
 const Onboarding = () => {
   const [isDialogOpen, setIsDialogOpen] = useState(false);
@@ -47,36 +44,15 @@ const Onboarding = () => {
       </p>
 
       <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
-        <DialogContent className="sm:max-w-md">
+        <DialogContent className="max-w-[75%] md:max-w-[55%] lg:max-w-[45%] xl:max-w-[30%] mx-auto rounded-lg">
           <DialogHeader>
-            <DialogTitle>Share link</DialogTitle>
+            <DialogTitle>Create wallet</DialogTitle>
             <DialogDescription>
               Anyone who has this link will be able to view this.
             </DialogDescription>
           </DialogHeader>
-          <div className="flex items-center space-x-2">
-            <div className="grid flex-1 gap-2">
-              <Label htmlFor="link" className="sr-only">
-                Link
-              </Label>
-              <input
-                id="link"
-                defaultValue="https://ui.shadcn.com/docs/installation"
-                readOnly
-              />
-            </div>
-            <Button type="submit" size="sm" className="px-3">
-              <span className="sr-only">Copy</span>
-              <Copy />
-            </Button>
-          </div>
-          <DialogFooter className="sm:justify-start">
-            <DialogClose asChild>
-              <Button type="button" variant="secondary">
-                Close
-              </Button>
-            </DialogClose>
-          </DialogFooter>
+
+          <RegistrationForm />
         </DialogContent>
       </Dialog>
     </div>
