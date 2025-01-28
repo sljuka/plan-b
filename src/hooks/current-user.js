@@ -1,3 +1,7 @@
+/**
+ * 
+ * @returns {null|{adminKey: string, invoiceKey: string, walletId: string}}
+ */
 const useCurrentUser = () => {
     const currentUser = localStorage.getItem('userData');
 
