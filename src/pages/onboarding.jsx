@@ -11,18 +11,38 @@ import {
 } from "@/components/ui/dialog";
 import { Label } from "@/components/ui/label";
 import { useState } from "react";
+import useCreateWallet from "@/hooks/useCreateWallet";
+import useRestoreWallet from "@/hooks/useRestoreWallet";
 
 const Onboarding = () => {
   const [isDialogOpen, setIsDialogOpen] = useState(false);
+  const [userId, setUserId] = useState('');
+  const [isRestore, setIsRestore] = useState(false);
+
+  // Use the custom hooks
+  const { createWallet, walletId: createdWalletId, error: createError, loading: createLoading } = useCreateWallet();
+  const { restoreWallet, walletId: restoredWalletId, error: restoreError, loading: restoreLoading } = useRestoreWallet();
 
   const openDialog = () => setIsDialogOpen(true);
+
+  const handleCreateWallet = async () => {
+    await createWallet();
+  };
+
+  const handleRestoreWallet = async () => {
+    if (!userId) {
+      alert("Please enter a valid user ID");
+      return;
+    }
+    await restoreWallet(userId);
+  };
 
   return (
     <div className="min-h-screen bg-black flex flex-col justify-center items-center text-white px-4 sm:px-6">
       <img
         className="w-32 sm:w-40 md:w-auto"
         src="/planb-logo.png"
-        alt="Workflow logo"
+        alt="Plan B Wallet Logo"
       />
       <p className="text-[#CCCCCC] text-[16px] sm:text-[18px] md:text-[20px] py-4 md:py-6">
         Send & Receive Bitcoin
@@ -31,21 +51,57 @@ const Onboarding = () => {
         A simple Bitcoin Wallet for your enjoyment
       </p>
 
-      <Button
-        className="bg-[#F89B2A] transition-all duration-300 py-4 sm:py-5 md:py-6 text-sm sm:text-lg md:text-[18px] rounded-xl shadow-lg hover:bg-[#f89b2adf] text-white font-normal px-12 sm:px-16 md:px-20"
-        onClick={openDialog}
-      >
-        Create a new wallet
-      </Button>
+      {/* Conditionally Render "Create Wallet" Button */}
+      {!isRestore && (
+        <Button
+          className="bg-[#F89B2A] transition-all duration-300 py-4 sm:py-5 md:py-6 text-sm sm:text-lg md:text-[18px] rounded-xl shadow-lg hover:bg-[#f89b2adf] text-white font-normal px-12 sm:px-16 md:px-20"
+          onClick={handleCreateWallet}
+          disabled={createLoading}
+        >
+          {createLoading ? "Creating..." : "Create a new wallet"}
+        </Button>
+      )}
 
-      <small className="text-[#F89B2A] text-[16px] sm:text-[18px] pt-4 sm:pt-5">
-        Restore an existing wallet
+      {/* Restore Wallet Button and Wallet ID Input */}
+      <small
+        className="text-[#F89B2A] text-[16px] sm:text-[18px] pt-4 sm:pt-5 cursor-pointer"
+        onClick={() => setIsRestore(!isRestore)}
+      >
+        {isRestore ? "Cancel Restore" : "Restore an existing wallet"}
       </small>
 
+      {/* Show input field for restoring wallet if isRestore is true */}
+      {isRestore && (
+        <>
+          <input
+            type="text"
+            placeholder="Enter Wallet ID"
+            value={userId}
+            onChange={(e) => setUserId(e.target.value)}
+            className="mt-4 p-2 rounded-md text-black"
+          />
+          <Button
+            className="bg-[#F89B2A] transition-all duration-300 py-4 sm:py-5 md:py-6 text-sm sm:text-lg md:text-[18px] rounded-xl shadow-lg hover:bg-[#f89b2adf] text-white font-normal px-12 sm:px-16 md:px-20 mt-4"
+            onClick={handleRestoreWallet}
+            disabled={restoreLoading}
+          >
+            {restoreLoading ? "Restoring..." : "Restore Wallet"}
+          </Button>
+        </>
+      )}
+
       <p className="pt-8 sm:pt-10 md:pt-12 text-[18px] sm:text-[20px] text-center md:text-left">
-        Your wallet, Your coins
+        Your Keys, Your Coins
       </p>
 
+      {/* Display errors if any */}
+      {(createError || restoreError) && (
+        <div className="text-red-500 mt-4">
+          {createError || restoreError}
+        </div>
+      )}
+
+      {/* Dialog for Sharing Wallet ID */}
       <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
         <DialogContent className="sm:max-w-md">
           <DialogHeader>
@@ -61,8 +117,9 @@ const Onboarding = () => {
               </Label>
               <input
                 id="link"
-                defaultValue="https://ui.shadcn.com/docs/installation"
+                defaultValue={`Your wallet ID is: ${createdWalletId || restoredWalletId}`}
                 readOnly
+                className="p-2 rounded-md text-black"
               />
             </div>
             <Button type="submit" size="sm" className="px-3">
