@@ -1,5 +1,7 @@
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import { WalletInfo } from "@/pages/wallet-info";
+import { PayInvoice } from "@/pages/pay-invoice";
+import { GetHistory } from "@/pages/payment-history";
 import Warning from "@/pages/warning";
 import Onboarding from "@/pages/onboarding";
 import Home from "@/pages/home";
@@ -17,6 +19,22 @@ const AppRoutes = () => {
           element={
             <Protected>
               <WalletInfo />
+            </Protected>
+          }
+        />
+        <Route
+          path="/payinvoice"
+          element={
+            <Protected>
+              <PayInvoice />
+            </Protected>
+          }
+        />
+        <Route
+          path="/history"
+          element={
+            <Protected>
+              <GetHistory />
             </Protected>
           }
         />
@@ -52,7 +70,6 @@ const AppRoutes = () => {
             </Protected>
           }
         />
-
         <Route
           index
           path="/"
