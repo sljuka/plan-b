@@ -4,6 +4,7 @@ import Warning from "@/pages/warning";
 import Onboarding from "@/pages/onboarding";
 import Home from "@/pages/home";
 import { Protected } from "@/lib/protected";
+import { Public } from "@/lib/Public";
 import { Invoice } from "@/components/invoice";
 
 const AppRoutes = () => {
@@ -14,7 +15,7 @@ const AppRoutes = () => {
         <Route path="/home" element={<Protected><Home /></Protected>} />
         <Route path="/warning" element={<Protected><Warning /></Protected>} />
         <Route path="/invoice" element={<Protected><Invoice /></Protected>} />
-        <Route index path="/" element={<Onboarding />} />
+        <Route index path="/" element={<Public><Onboarding /></Public>} />
       </Routes>
     </BrowserRouter>
   );
