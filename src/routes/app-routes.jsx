@@ -1,16 +1,22 @@
-import Home from "@/pages/home";
-import Onboarding from "@/pages/onboarding";
+import { BrowserRouter, Route, Routes } from "react-router-dom";
 import { WalletInfo } from "@/pages/wallet-info";
+import Warning from "@/pages/warning";
+import Onboarding from "@/pages/onboarding";
+import Home from "@/pages/home";
 import { Invoice } from "@/components/invoice";
-import { Switch, Route } from "react-router-dom";
 
-const AppRoutes = () => (
-  <Switch>
-    <Route path="/wallet" component={WalletInfo} />
-    <Route path="/invoice" component={Invoice} />
-    <Route path="/home" component={Home} />
-    <Route path="/" component={Onboarding} />
-  </Switch>
-);
+const AppRoutes = () => {
+  return (
+    <BrowserRouter>
+      <Routes>
+        <Route path="/wallet" element={<WalletInfo />} />
+        <Route path="/home" element={<Home />} />
+        <Route path="/warning" element={<Warning />} />
+        <Route path="/invoice" element={<Invoice />} />
+        <Route index path="/" element={<Onboarding />} />
+      </Routes>
+    </BrowserRouter>
+  );
+};
 
 export default AppRoutes;
