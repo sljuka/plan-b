@@ -10,7 +10,7 @@ const AppRoutes = () => {
   return (
     <BrowserRouter>
       <Routes>
-        <Route path="/history" component={GetHistory} />
+        <Route path="/history" element={<GetHistory />} />
         <Route path="/payinvoice" component={PayInvoice} />
         <Route path="/wallet" element={<WalletInfo />} />
         <Route path="/home" element={<Home />} />
