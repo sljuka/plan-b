@@ -2,8 +2,12 @@ import { ArrowDownLeft, ArrowUpRight, Activity } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import BitcoinBalance from "@/components/bitcoin-balance";
 import useWalletInfo from "@/hooks/get-wallet";
+import { useNavigate } from "react-router-dom";
+import useLogout from "@/hooks/logout";
 
 export default function Home() {
+  const mutation = useLogout();
+  const navigate = useNavigate();
   const { data: walletInfo } = useWalletInfo();
 
   if (!walletInfo) {
@@ -19,6 +23,14 @@ export default function Home() {
           <h1 className="text-3xl font-bold tracking-tight">
             Plan <span className="text-[#F89B2A] mr-2">₿</span>Wallet
           </h1>
+          <button
+            onClick={() => {
+              mutation.mutate();
+              navigate("/");
+            }}
+          >
+            Logout
+          </button>
         </header>
 
         <main className="space-y-12">
