@@ -14,13 +14,14 @@ const useDecodeInvoice = (string) => {
         "data": string,
         "filter_fields": []
       }
-      const response = await axios.post(`${BASE_URL}${"/api/v1/payments/decode"}`, {
+      const response = await axios.post(`${BASE_URL}${"/api/v1/payments/decode"}`,
         payload,
-        headers: {
-          "X-Api-Key": invoiceKey,
-          "Content-Type": "application/json",
-        },
-      });
+        {
+          headers: {
+            "X-Api-Key": invoiceKey,
+            "Content-Type": "application/json",
+          },
+        });
 
       return response.data;
     },
