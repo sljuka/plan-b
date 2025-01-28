@@ -1,17 +1,23 @@
 import { useState } from "react";
 import { Button } from "./ui/button";
+import { useRestoreWallet } from "@/hooks/restore-wallet";
+import { useNavigate } from "react-router-dom";
 
 /* import useCreateWallet from "@/hooks/create-wallet";
  */
 const RestoreWallet = () => {
   const [userId, setUserId] = useState("");
+  const navigate = useNavigate();
+
+  const { mutateAsync } = useRestoreWallet();
   const handleRestoreWallet = async () => {
     if (!userId) {
       alert("Please enter a valid user ID");
       return;
     }
-    /*     await restoreWallet(userId);
-     */
+    mutateAsync().then(() => {
+      navigate("/home");
+    });
   };
   return (
     <div>
