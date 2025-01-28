@@ -1,13 +1,19 @@
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import useCreateWallet from "@/hooks/create-wallet";
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 const RegistrationForm = () => {
   const [name, setName] = useState("");
+  const { mutateAsync } = useCreateWallet();
+  const navigate = useNavigate();
 
   const handleSubmit = (event) => {
     event.preventDefault(); // Evitar que el formulario recargue la página
-    console.log("Name:", name); // Mostrar el nombre en la consola
+    mutateAsync(name).then(() => {
+      navigate("/home");
+    });
   };
 
   return (

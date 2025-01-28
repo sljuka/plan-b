@@ -3,7 +3,7 @@ import { WalletInfo } from "@/pages/wallet-info";
 import Warning from "@/pages/warning";
 import Onboarding from "@/pages/onboarding";
 import Home from "@/pages/home";
-import { Protected } from "@/utils/protected2";
+import { Protected } from "@/lib/protected";
 import { Invoice } from "@/components/invoice";
 
 const AppRoutes = () => {

@@ -2,13 +2,16 @@ import useCurrentUser from "@/hooks/current-user";
 import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 
-export const Protected = (children) => {
-  const currentUser = useCurrentUser();
+export const Protected = ({ children }) => {
   const navigate = useNavigate();
 
+  const currentUser = useCurrentUser();
+
   useEffect(() => {
-    if (!currentUser) navigate("/home");
+    if (!currentUser) {
+      return navigate("/");
+    }
   }, [navigate, currentUser]);
 
-  return <>{children}</>;
+  return children;
 };

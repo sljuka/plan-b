@@ -4,26 +4,30 @@ import useCurrentUser from "./current-user";
 
 const useCreateInvoice = () => {
   const BASE_URL = import.meta.env.VITE_BASE_URL;
-  const { invoiceKey } = useCurrentUser();
+  const currentUser = useCurrentUser();
 
   return useMutation({
     mutationFn: async (amount, description = "", expiry = 3600) => {
       const payload = {
-        "out": false,
-        "amount": amount,
-        "unit": "sat",
-        "memo": description,
-        "expiry": expiry,
+        out: false,
+        amount: amount,
+        unit: "sat",
+        memo: description,
+        expiry: expiry,
       };
 
-      const response = await axios.post(`${BASE_URL}${"/api/v1/payments"}`,
+      if (!currentUser) return null;
+
+      const response = await axios.post(
+        `${BASE_URL}${"/api/v1/payments"}`,
         payload,
         {
           headers: {
-            "X-Api-Key": invoiceKey,
+            "X-Api-Key": currentUser.invoiceKey,
             "Content-Type": "application/json",
           },
-        });
+        }
+      );
 
       return response.data;
     },
