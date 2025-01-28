@@ -6,7 +6,7 @@ import Warning from "@/pages/warning";
 import Onboarding from "@/pages/onboarding";
 import Home from "@/pages/home";
 import { Protected } from "@/lib/protected";
-import { Public } from "@/lib/Public";
+import { Public } from "@/lib/public";
 import { Invoice } from "@/components/invoice";
 import Test from "@/pages/test";
 
