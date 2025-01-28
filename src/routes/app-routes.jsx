@@ -1,6 +1,7 @@
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import { WalletInfo } from "@/pages/wallet-info";
 import { PayInvoice } from "@/pages/pay-invoice";
+import { GetHistory } from "@/pages/payment-history"
 import Warning from "@/pages/warning";
 import Onboarding from "@/pages/onboarding";
 import Home from "@/pages/home";
@@ -9,6 +10,7 @@ const AppRoutes = () => {
   return (
     <BrowserRouter>
       <Routes>
+        <Route path="/history" component={GetHistory} />
         <Route path="/payinvoice" component={PayInvoice} />
         <Route path="/wallet" element={<WalletInfo />} />
         <Route path="/home" element={<Home />} />
