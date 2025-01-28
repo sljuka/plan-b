@@ -40,17 +40,17 @@ const RegistrationForm = () => {
               id="name"
               name="name"
               placeholder="Enter your name"
-              className="group-data-[invalid=true]/field:border-destructive focus-visible:group-data-[invalid=true]/field:ring-destructive"
+              className="my-2 group-data-[invalid=true]/field:border-destructive focus-visible:group-data-[invalid=true]/field:ring-destructive"
             />
             <ErrorMessage
               name="name"
               component="p"
-              className="text-destructive text-sm pt-2"
+              className="text-destructive text-sm mt-2 mb-2"
             />
             <Button
               type="submit"
               variant="secondary"
-              className="mt-2 transition-all md:w-auto w-full duration-300 rounded-xl shadow-lg hover:bg-[#f89b2adf] font-normal"
+              className="my-2 transition-all md:w-auto w-full duration-300 rounded-xl shadow-lg hover:bg-[#f89b2adf] font-normal"
               disabled={isPending}
             >
               {isPending ? "Submitting..." : "Submit"}
