@@ -1,9 +1,10 @@
 import { useMutation } from "@tanstack/react-query";
 import axios from "axios";
+import useCurrentUser from "./current-user";
 
 const useCreateInvoice = () => {
-  const API_KEY = import.meta.env.VITE_INVOICE_READ_KEY;
   const BASE_URL = import.meta.env.VITE_BASE_URL;
+  const { invoiceKey } = useCurrentUser();
 
   return useMutation({
     mutationFn: async (amount, description = "", expiry = 3600) => {
@@ -19,7 +20,7 @@ const useCreateInvoice = () => {
         payload,
         {
           headers: {
-            "X-Api-Key": API_KEY,
+            "X-Api-Key": invoiceKey,
             "Content-Type": "application/json",
           },
         });

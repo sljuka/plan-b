@@ -1,9 +1,10 @@
 import { useMutation } from "@tanstack/react-query";
 import axios from "axios";
+import useCurrentUser from "./current-user";
 
 const useCreateWallet = () => {
-  const ADMIN_KEY = import.meta.env.VITE_ADMIN_KEY
   const BASE_URL = import.meta.env.VITE_BASE_URL;
+  const { adminKey } = useCurrentUser();
 
   return useMutation({
     mutationFn: async (name = "Plan B hackathon") => {
@@ -15,7 +16,7 @@ const useCreateWallet = () => {
         payload,
         {
           headers: {
-            "X-Api-Key": ADMIN_KEY,
+            "X-Api-Key": adminKey,
             "Content-Type": "application/json",
           },
         });
