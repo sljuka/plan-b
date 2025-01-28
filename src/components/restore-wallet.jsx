@@ -6,16 +6,16 @@ import { useNavigate } from "react-router-dom";
 /* import useCreateWallet from "@/hooks/create-wallet";
  */
 const RestoreWallet = () => {
-  const [userId, setUserId] = useState("");
+  const [walletId, setWalletId] = useState("");
   const navigate = useNavigate();
 
   const { mutateAsync } = useRestoreWallet();
   const handleRestoreWallet = async () => {
-    if (!userId) {
+    if (!walletId) {
       alert("Please enter a valid user ID");
       return;
     }
-    mutateAsync().then(() => {
+    mutateAsync(walletId).then(() => {
       navigate("/home");
     });
   };
@@ -41,8 +41,8 @@ const RestoreWallet = () => {
         <input
           type="text"
           placeholder="Enter Wallet ID"
-          value={userId}
-          onChange={(e) => setUserId(e.target.value)}
+          value={walletId}
+          onChange={(e) => setWalletId(e.target.value)}
           className="mt-4 p-2 rounded-md text-black"
         />
         <Button
