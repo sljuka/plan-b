@@ -4,20 +4,21 @@ import useCurrentUser from "./current-user";
 
 const useWalletInfo = () => {
   const BASE_URL = import.meta.env.VITE_BASE_URL;
-  const { invoiceKey } = useCurrentUser();
+  const currentUser = useCurrentUser();
 
   return useQuery({
     queryKey: ["walletInfo"],
     queryFn: async () => {
       const response = await axios(`${BASE_URL}${"/api/v1/wallet"}`, {
         headers: {
-          "X-Api-Key": invoiceKey,
+          "X-Api-Key": currentUser.invoiceKey,
           "Content-Type": "application/json",
         },
       });
 
       return response.data;
     },
+    enabled: Boolean(currentUser)
   });
 };
 
