@@ -7,8 +7,8 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 import { useState } from "react";
-import useCreateWallet from "@/hooks/useCreateWallet";
-import useRestoreWallet from "@/hooks/useRestoreWallet";
+import useCreateWallet from "@/hooks/create-wallet";
+// import useRestoreWallet from "@/hooks/useRestoreWallet";
 import RegistrationForm from "@/forms/registration-form";
 
 const Onboarding = () => {
