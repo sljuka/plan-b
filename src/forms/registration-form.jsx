@@ -1,5 +1,7 @@
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import useCreateWallet from "@/hooks/create-wallet";
+import { useNavigate } from "react-router-dom";
 import { Formik, Form, Field, ErrorMessage } from "formik";
 import * as Yup from "yup";
 
@@ -11,11 +13,13 @@ const RegistrationForm = () => {
       .min(5, "Name cannot be less than 5 characters."),
   });
 
-  const handleSubmit = (values, { setSubmitting }) => {
-    setTimeout(() => {
-      console.log("Name:", values.name);
-      setSubmitting(false);
-    }, 1000);
+  const { mutateAsync, isPending } = useCreateWallet();
+  const navigate = useNavigate();
+
+  const handleSubmit = (values) => {
+    mutateAsync(values.name).then(() => {
+      navigate("/home");
+    });
   };
 
   return (
@@ -24,7 +28,7 @@ const RegistrationForm = () => {
       validationSchema={validationSchema}
       onSubmit={handleSubmit}
     >
-      {({ isSubmitting }) => (
+      {() => (
         <Form>
           <div>
             <label htmlFor="name" className="text-sm font-medium">
@@ -47,9 +51,9 @@ const RegistrationForm = () => {
               type="submit"
               variant="secondary"
               className="mt-2 transition-all md:w-auto w-full duration-300 rounded-xl shadow-lg hover:bg-[#f89b2adf] font-normal"
-              disabled={isSubmitting}
+              disabled={isPending}
             >
-              {isSubmitting ? "Submitting..." : "Submit"}
+              {isPending ? "Submitting..." : "Submit"}
             </Button>
           </div>
         </Form>
