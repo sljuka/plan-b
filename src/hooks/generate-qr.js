@@ -4,15 +4,15 @@ import useCurrentUser from "./current-user";
 
 const useGenerateQr = (string) => {
   const BASE_URL = import.meta.env.VITE_BASE_URL;
-  const { invoiceKey } = useCurrentUser();
-
+  const currentUser = useCurrentUser();
 
   return useQuery({
+    enabled: Boolean(currentUser),
     queryKey: ["generateQr", string],
     queryFn: async () => {
       const response = await axios(`${BASE_URL}${"/api/v1/qrcode/"}${string}`, {
         headers: {
-          "X-Api-Key": invoiceKey,
+          "X-Api-Key": currentUser.invoiceKey,
           "Content-Type": "application/json",
         },
       });

@@ -7,6 +7,7 @@ const useWalletInfo = () => {
   const currentUser = useCurrentUser();
 
   return useQuery({
+    enabled: Boolean(currentUser),
     queryKey: ["walletInfo"],
     queryFn: async () => {
       const response = await axios(`${BASE_URL}${"/api/v1/wallet"}`, {
@@ -18,7 +19,6 @@ const useWalletInfo = () => {
 
       return response.data;
     },
-    enabled: Boolean(currentUser)
   });
 };
 
