@@ -68,3 +68,16 @@
 .hover\:bg-\[\#F89B2A\]\/90:hover {
   box-shadow: 0 0 15px #f89b2a80;
 }
+
+
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+::-webkit-scrollbar-track {
+  background-color: #2d2d2d;
+}
+::-webkit-scrollbar-thumb {
+  background-color: #6f6f6f;
+  border-radius: 20px;
+}
