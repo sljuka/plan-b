@@ -6,8 +6,7 @@ import QRCode from "./qr-code";
 export const Invoice = () => {
   const [amount, setAmount] = useState(0);
   const [memo, setMemo] = useState("");
-  const [expire, setExpire] = useState(3600);
-  const mutation = useCreateInvoice();
+  const mutationInvoice = useCreateInvoice();
 
   return (
     <>
@@ -22,30 +21,28 @@ export const Invoice = () => {
         placeholder="Memo"
         onChange={(e) => setMemo(e.target.value)}
       />
-      <input
-        type="number"
-        placeholder="Expire"
-        onChange={(e) => setExpire(e.target.value)}
-      />
       <div>
-        {mutation.isPending ? (
+        {mutationInvoice.isPending ? (
           "Creating invoice..."
         ) : (
           <>
-            {mutation.isError ? (
-              <div>An error occurred: {mutation.error.message}</div>
+            {mutationInvoice.isError ? (
+              <div>An error occurred: {mutationInvoice.error.message}</div>
             ) : null}
 
-            {mutation.isSuccess ? (
+            {mutationInvoice.isSuccess ? (
               <>
-                <div>Invoice: {mutation.data?.payment_request}</div>
-                <QRCode size="200px" string={mutation.data?.payment_request} />
+                <div>Invoice: {mutationInvoice.data?.payment_request}</div>
+                <QRCode
+                  size="200px"
+                  string={mutationInvoice.data?.payment_request}
+                />
               </>
             ) : null}
 
             <Button
               onClick={() => {
-                mutation.mutate(amount, memo, expire);
+                mutationInvoice.mutate({ amount, memo });
               }}
             >
               Create Invoice
