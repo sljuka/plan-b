@@ -45,6 +45,7 @@ export default function Home() {
               <Button
                 variant="secondary"
                 className="flex-1 transition-all duration-300 py-4 sm:py-6 text-lg rounded-xl shadow-lg text-[16px] sm:text-[18px] hover:bg-[#f89b2adf] text-white font-normal sm:px-20"
+                onClick={() => navigate('/receive')}
               >
                 <ArrowDownLeft className="mr-2 h-5 sm:h-6 w-5 sm:w-6" /> Receive
               </Button>

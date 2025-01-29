@@ -10,6 +10,7 @@ import { Public } from "@/lib/public";
 import { Invoice } from "@/components/invoice";
 import Test from "@/pages/test";
 import { Backup } from "@/pages/backup";
+import BtcBoard from "@/components/receive/btc-board";
 
 const AppRoutes = () => {
   return (
@@ -52,6 +53,14 @@ const AppRoutes = () => {
           element={
             <Protected>
               <Backup />
+            </Protected>
+          }
+        />
+        <Route
+          path="/receive"
+          element={
+            <Protected>
+              <BtcBoard />
             </Protected>
           }
         />
