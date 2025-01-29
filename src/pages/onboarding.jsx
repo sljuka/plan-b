@@ -13,11 +13,22 @@ import Terms from "@/components/wallet-creation/terms";
 import WalletHandle from "@/components/wallet-creation/wallet-handle";
 
 const Onboarding = () => {
+  const [isDialogOpen, setIsDialogOpen] = useState(false); // State for dialog
+  const [isRestore, setIsRestore] = useState(false); // State for restore process
+  const [step, setStep] = useState("terms"); // State for form step
+
 
   const handleCreateWallet = async () => {
     setIsDialogOpen(true);
   };
-
+  const handleNext = () => {
+    if (step === "terms") {
+      setStep("form");
+    } else if (step === "form") {
+      setStep("wallet-created");
+    }
+  };
+  
   return (
     <div className="min-h-screen bg-black flex flex-col justify-center items-center text-white px-4 sm:px-6">
       <img
