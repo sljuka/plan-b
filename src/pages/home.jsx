@@ -9,6 +9,7 @@ export default function Home() {
   const mutation = useLogout();
   const navigate = useNavigate();
   const { data: walletInfo } = useWalletInfo();
+  console.log(walletInfo);
 
   if (!walletInfo) {
     return <div className="min-h-screen bg-black">Loading...</div>;
@@ -35,7 +36,7 @@ export default function Home() {
 
         <main className="space-y-12">
           <section>
-            <h2 className="text-xl mb-6 font-light">Current Balance</h2>
+            <p className="text-xl md:text-2xl pb-4">{walletInfo?.name}</p>
             <BitcoinBalance balance={walletInfo.balance} />
           </section>
 
@@ -45,11 +46,12 @@ export default function Home() {
               <Button
                 variant="secondary"
                 className="flex-1 transition-all duration-300 py-4 sm:py-6 text-lg rounded-xl shadow-lg text-[16px] sm:text-[18px] hover:bg-[#f89b2adf] text-white font-normal sm:px-20"
-                onClick={() => navigate('/receive')}
+                onClick={() => navigate("/receive")}
               >
                 <ArrowDownLeft className="mr-2 h-5 sm:h-6 w-5 sm:w-6" /> Receive
               </Button>
               <Button
+                onClick={() => navigate("/send")}
                 variant="secondary"
                 className="flex-1 text-white hover:bg-[#F89B2A]/90 transition-all duration-300 py-4 sm:py-6 text-lg rounded-xl shadow-lg sm:px-20"
               >

@@ -11,6 +11,7 @@ import { Invoice } from "@/components/invoice";
 import Test from "@/pages/test";
 import { Backup } from "@/pages/backup";
 import BtcBoard from "@/components/receive/btc-board";
+import SendBtc from "@/pages/send-btc";
 
 const AppRoutes = () => {
   return (
@@ -61,6 +62,14 @@ const AppRoutes = () => {
           element={
             <Protected>
               <BtcBoard />
+            </Protected>
+          }
+        />
+        <Route
+          path="/send"
+          element={
+            <Protected>
+              <SendBtc />
             </Protected>
           }
         />
