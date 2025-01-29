@@ -15,21 +15,26 @@ import { useNavigate } from "react-router-dom";
 import { toSats } from "@/utils/sats";
 
 const InvoiceSummary = ({ invoice }) => {
-  const { mutateAsync } = usePayInvoice();
+  const { mutateAsync, error, isPending } = usePayInvoice();
   const { data } = useDecodeInvoice(invoice);
   const [isDialogOpen, setDialogOpen] = useState(false);
   const navigate = useNavigate();
   console.log(data);
 
   const handleSendInvoice = async () => {
-    await mutateAsync(invoice);
-    confetti({
-      particleCount: 100,
-      spread: 70,
-      origin: { y: 0.6 },
-    });
+    mutateAsync(invoice)
+      .then(() => {
+        confetti({
+          particleCount: 100,
+          spread: 70,
+          origin: { y: 0.6 },
+        });
 
-    setDialogOpen(true);
+        setDialogOpen(true);
+      })
+      .catch((e) => {
+        console.error(e);
+      });
   };
 
   const handleCloseDialog = () => {
@@ -42,7 +47,7 @@ const InvoiceSummary = ({ invoice }) => {
       <div className="w-full max-w-md px-4 mx-auto pt-4">
         <div className="absolute top-6 left-4">
           <Button
-          variant="ghost"
+            variant="ghost"
             onClick={() => navigate(-1)} // Go back to the previous page
             className="bg-transparent text-[#F89B2A] border-none"
           >
@@ -77,7 +82,9 @@ const InvoiceSummary = ({ invoice }) => {
 
           <div className="border-b border-zinc-800 pb-4">
             <div className="text-sm text-zinc-400">Date</div>
-            <div className="text-zinc-300 mt-1">{new Date(data?.date * 1000).toLocaleString()}</div>
+            <div className="text-zinc-300 mt-1">
+              {new Date(data?.date * 1000).toLocaleString()}
+            </div>
           </div>
 
           <div className="border-b border-zinc-800 pb-4">
@@ -90,9 +97,15 @@ const InvoiceSummary = ({ invoice }) => {
           onClick={handleSendInvoice}
           variant="secondary"
           className="mt-6 transition-all w-full duration-300 rounded-xl shadow-lg hover:bg-[#f89b2adf] font-normal"
+          disabled={isPending}
         >
-          Send
+          {isPending ? "Sending..." : "Send"}
         </Button>
+        {error && (
+          <span name="name" className="text-red-500 text-sm mt-2">
+            {error?.response?.data?.detail}
+          </span>
+        )}
       </div>
 
       <Dialog open={isDialogOpen} onOpenChange={handleCloseDialog}>
