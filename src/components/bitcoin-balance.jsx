@@ -1,44 +1,44 @@
 /* eslint-disable react/prop-types */
 
-export default function BitcoinBalance({balance}) {
-  const formattedBalance = balance.toFixed(8);
+export default function BitcoinBalance({ balance }) {
+  // Convert from msatoshis to BTC and format with 8 decimal places
+  const formattedBalance = (balance / 100000000000).toFixed(8); // Convert from msatoshis to BTC
   const [whole, decimal] = formattedBalance.split(".");
 
-/*   const lastNonZeroIndex = decimal
-    .split("")
-    .reverse()
-    .findIndex((char) => char !== "0");
-  const significantDigits =
-    decimal.length -
-    (lastNonZeroIndex === -1 ? decimal.length : lastNonZeroIndex); */
+  // Ensure the decimal part has exactly 8 digits, adding trailing zeros if needed
+  const paddedDecimal = decimal.padEnd(8, '0'); // Ensure 8 decimal places
 
-/*   const decimalParts = decimal.split("").map((digit, index) => {
-    const isSignificant = index < significantDigits;
-    return (
-      <span
-        key={index}
-        className={`${isSignificant ? "text-white" : "text-white/30"} ${
-          (index + 1) % 3 === 0 ? "mr-0.5" : ""
-        }`}
-      >
-        {digit}
-      </span>
-    );
-  }); */
+  // Format the decimal part by adding a space every 3 digits after the first 2 digits
+  const firstPart = paddedDecimal.slice(0, 2);  // Get the first two digits after the decimal point
+  const remainingPart = paddedDecimal.slice(2);  // Get the remaining digits
+  
+  // Group the remaining digits in sets of 3
+  const groupedDecimal = remainingPart.match(/.{1,3}/g)?.join(" ") || "";
+
+  // Function to grey out zero digits, including the first zero
+  const greyOutZeroes = (decimalPart) => {
+    console.log('AAA', decimalPart, typeof decimalPart)
+    return decimalPart.split("").map((char, index) => {
+      if (char === "0") {
+        return <span className="text-gray-500" key={index}>{char}</span>; // Grey out zeroes
+      }
+      return char; // Keep other digits as they are
+    });
+  };
+
+  // Apply the greyOutZeroes function to both the whole and decimal parts
+  const formattedWhole = greyOutZeroes(whole);
+  const formattedDecimal = `${firstPart} ${groupedDecimal}`.trim();
 
   return (
     <div className="bg-gradient-to-br from-gray-900 to-black p-4 md:p-8 rounded-2xl w-full shadow-lg border border-white/10">
-      {/* <div className="flex justify-center mb-4">
-        {isLoading && (
-          <Loader2 className="h-8 w-8 text-white/50 animate-spin" />
-        )}
-      </div> */}
       <div className="text-center font-mono text-xl md:text-4xl tracking-wider">
         <span className="text-[#F89B2A] mr-2">₿</span>
-        <span className="text-white">{balance}</span>
-        {/* <span className="text-white">{whole}</span>
+        <span className="text-white">{formattedWhole}</span>
         <span className="text-white">.</span>
-        {decimalParts} */}
+        <span className="text-white">
+          {greyOutZeroes(formattedDecimal)}
+        </span>
       </div>
     </div>
   );
