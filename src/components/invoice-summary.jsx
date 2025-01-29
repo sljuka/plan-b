@@ -13,9 +13,11 @@ import {
 import confetti from "canvas-confetti";
 import { useNavigate } from "react-router-dom";
 import { toSats } from "@/utils/sats";
+import usePayLnurl from "@/hooks/pay-lnurl";
 
-const InvoiceSummary = ({ invoice }) => {
+const InvoiceSummary = ({ invoice, isInvoice, amount }) => {
   const { mutateAsync, error, isPending } = usePayInvoice();
+  const { mutateAsync: mutateLnurl } = usePayLnurl();
   const { data } = useDecodeInvoice(invoice);
   const [isDialogOpen, setDialogOpen] = useState(false);
   const navigate = useNavigate();
@@ -35,6 +37,17 @@ const InvoiceSummary = ({ invoice }) => {
       .catch((e) => {
         console.error(e);
       });
+  };
+
+  const handleSendLnurl = async () => {
+    await mutateLnurl(invoice);
+    confetti({
+      particleCount: 100,
+      spread: 70,
+      origin: { y: 0.6 },
+    });
+
+    setDialogOpen(true);
   };
 
   const handleCloseDialog = () => {
@@ -66,19 +79,21 @@ const InvoiceSummary = ({ invoice }) => {
             </div>
           </div>
 
-          <div className="border-b border-zinc-800 pb-4">
-            <div className="text-sm text-zinc-400">To</div>
-            <div className="flex justify-between items-center mt-1">
-              <div className="text-zinc-300 text-ellipsis overflow-hidden">
-                {invoice.length > 14
-                  ? `${invoice.substring(0, 14)}...${invoice.substring(
-                      invoice.length - 14
-                    )}`
-                  : invoice}
+          {isInvoice && (
+            <div className="border-b border-zinc-800 pb-4">
+              <div className="text-sm text-zinc-400">To</div>
+              <div className="flex justify-between items-center mt-1">
+                <div className="text-zinc-300 text-ellipsis overflow-hidden">
+                  {invoice.length > 14
+                    ? `${invoice.substring(0, 14)}...${invoice.substring(
+                        invoice.length - 14
+                      )}`
+                    : invoice}
+                </div>
+                <User className="w-5 h-5 text-zinc-600 ml-2 flex-shrink-0" />
               </div>
-              <User className="w-5 h-5 text-zinc-600 ml-2 flex-shrink-0" />
             </div>
-          </div>
+          )}
 
           <div className="border-b border-zinc-800 pb-4">
             <div className="text-sm text-zinc-400">Date</div>
