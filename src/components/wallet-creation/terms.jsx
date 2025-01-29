@@ -27,31 +27,33 @@ export default function Terms({ onNext }) {
         </div>
 
         {/* Title */}
-        <h1 className="text-2xl font-bold text-center mt-6">
+        <h1 className="text-xl md:text-2xl font-bold text-center mt-6">
           Two things you must understand
         </h1>
 
         {/* Toggle Items */}
         <div className="space-y-6 mt-8">
           <div className="flex items-center justify-between">
-            <p className="text-gray-400 pt-2">
+            <label htmlFor="first" className="text-gray-400 pt-2 text-sm md:text-base">
               With bitcoin, you are your own bank. No one else has access to
               your ID.
-            </p>
+            </label>
             <Switch
               checked={termsChecked.first}
               onCheckedChange={() => handleToggle("first")}
+              id="first"
             />
           </div>
 
           <div className="flex items-center justify-between">
-            <p className="text-gray-400 pt-1">
+            <label htmlFor="second" className="text-gray-400 pt-1 text-sm md:text-base">
               If you lose access to this app, and the backup we will help you
               create, your bitcoin cannot be recovered.
-            </p>
+            </label>
             <Switch
               checked={termsChecked.second}
               onCheckedChange={() => handleToggle("second")}
+              id="second"
             />
           </div>
         </div>

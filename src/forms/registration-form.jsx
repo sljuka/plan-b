@@ -40,10 +40,10 @@ const RegistrationForm = ({ onNext }) => {
                 </div>
               </div>
 
-              <h1 className="text-2xl font-bold mt-6">
+              <h1 className="text-xl md:text-2xl font-bold mt-6">
                 Create a Lightning Network wallet
               </h1>
-              <p className="text-gray-400 pt-2">
+              <p className="text-gray-400 pt-2 text-sm md:text-lg">
                 We will use your name to identify your LN wallet and your
                 digital assets.
               </p>
