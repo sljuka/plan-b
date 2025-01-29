@@ -4,13 +4,15 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Label } from "@/components/ui/label";
+import { useNavigate } from "react-router-dom";
 
-export function PasswordSetup() {
+export function Backup() {
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirm, setShowConfirm] = useState(false);
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [agreed, setAgreed] = useState(false);
+  const navigate = useNavigate();
 
   const isPasswordValid = password.length >= 10;
   const isConfirmValid = password === confirmPassword && isPasswordValid;
@@ -21,7 +23,7 @@ export function PasswordSetup() {
         <Button
           variant="ghost"
           className="text-gray-400"
-         /*  onClick={() => router.push("/ready")} */
+          onClick={() => navigate("/home")}
         >
           Skip
         </Button>
@@ -110,7 +112,7 @@ export function PasswordSetup() {
         <Button
           className="w-full"
           disabled={!isConfirmValid || !agreed}
-          /* onClick={() => router.push("/ready")} */
+          onClick={() => navigate("/home")}
         >
           Continue
         </Button>

@@ -65,7 +65,7 @@ const Onboarding = () => {
       </p>
 
       <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
-        <DialogContent className="max-w-[75%] md:max-w-[55%] lg:max-w-[45%] xl:max-w-[45%] mx-auto rounded-lg">
+        <DialogContent className="max-w-[85%] md:max-w-[55%] lg:max-w-[45%] xl:max-w-[45%] mx-auto rounded-lg">
           <DialogHeader>
             <DialogTitle></DialogTitle>
             <DialogDescription></DialogDescription>
