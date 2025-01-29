@@ -19,6 +19,7 @@ const InvoiceSummary = ({ invoice }) => {
   const { data } = useDecodeInvoice(invoice);
   const [isDialogOpen, setDialogOpen] = useState(false);
   const navigate = useNavigate();
+  console.log(data);
 
   const handleSendInvoice = async () => {
     await mutateAsync(invoice);
