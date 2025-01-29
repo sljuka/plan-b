@@ -1,64 +1,68 @@
 import { useState } from "react";
-import { Button } from "./ui/button";
-import { useRestoreWallet } from "@/hooks/restore-wallet";
-import { useNavigate } from "react-router-dom";
+import { Button } from "./ui/button";  // Import Button component
+import { useRestoreWallet } from "@/hooks/restore-wallet";  // Custom hook for restoring wallet
+import { useNavigate } from "react-router-dom";  // For routing
 
-/* import useCreateWallet from "@/hooks/create-wallet";
- */
 const RestoreWallet = () => {
-  const [walletId, setWalletId] = useState("");
-  const navigate = useNavigate();
+  const [walletId, setWalletId] = useState("");  // Wallet ID state
+  const [loading, setLoading] = useState(false);  // Loading state to manage button state
+  const navigate = useNavigate();  // Navigation hook
 
-  const { mutateAsync } = useRestoreWallet();
+  const { mutateAsync } = useRestoreWallet();  // Calling restore wallet API
+
   const handleRestoreWallet = async () => {
-    if (!walletId) {
-      alert("Please enter a valid user ID");
+    if (!walletId) {  // Alert if no wallet ID is provided
+      alert("Please enter a valid wallet ID");
       return;
     }
-    mutateAsync(walletId).then(() => {
-      navigate("/home");
-    });
+
+    setLoading(true);  // Set loading state to true during restore process
+    try {
+      await mutateAsync(walletId);  // Call the restore API
+      navigate("/home");  // Redirect after successful wallet restore
+    } catch (error) {
+      console.error("Failed to restore wallet", error);
+      alert("An error occurred while restoring the wallet.");
+    } finally {
+      setLoading(false);  // Reset loading state when process is done
+    }
   };
+
   return (
-    <div>
-      <div className="grid flex-1 gap-2">
-        {/* <Label htmlFor="link" className="sr-only">
-          Link
-        </Label>
-        <input
-          id="link"
-            defaultValue={`Your wallet ID is: ${
-                createdWalletId || restoredWalletId
-              }`}
-          readOnly
-          className="p-2 rounded-md text-black"
-        /> */}
-        {/*  <p className="text-sm sm:text-lg text-gray-600">
-          Your wallet ID is 798123749873498
-        </p> */}
-      </div>
-      <div className="flex flex-col ">
-        <input
-          type="text"
-          placeholder="Enter Wallet ID"
-          value={walletId}
-          onChange={(e) => setWalletId(e.target.value)}
-          className="mt-4 p-2 rounded-md text-black"
-        />
+    <div className="bg-black flex flex-col justify-center items-center text-white px-4 sm:px-6">
+      {/* Back button */}
+      <div className="absolute top-6 left-4">
         <Button
-          className="bg-[#F89B2A] transition-all duration-300 py-4 sm:py-5 md:py-6 text-sm sm:text-lg md:text-[18px] rounded-xl shadow-lg hover:bg-[#f89b2adf] text-white font-normal px-12 sm:px-16 md:px-20 mt-4"
-          onClick={handleRestoreWallet}
-          /*             disabled={restoreLoading}
-           */
+          onClick={() => navigate(-1)}  // Go back to the previous page
+          className="bg-transparent text-[#F89B2A] border-none"
         >
-          {/* {restoreLoading ? "Restoring..." : "Restore Wallet"} */}
-          Restore wallet
+          &lt; Back
         </Button>
       </div>
-      {/*   Display errors if any
-      {(createError || restoreError) && (
-        <div className="text-red-500 mt-4">{createError || restoreError}</div>
-      )} */}
+
+      {/* Title and description */}
+      <h2 className="text-2xl sm:text-3xl font-bold text-[#F89B2A] py-2">Import Wallet</h2>
+      <p className="text-sm sm:text-lg text-[#CCCCCC] pb-3 text-center">
+        Copy and paste your wallet ID.
+      </p>
+
+      {/* Wallet ID Input */}
+      <div className="flex flex-col items-center mb-4">
+        <input
+          type="text"
+          placeholder="Paste wallet ID here..."
+          value={walletId}
+          onChange={(e) => setWalletId(e.target.value)}
+          className="bg-gray-800 text-white p-3 rounded-md w-full sm:w-80 mb-3"
+        />
+        <Button
+          className="bg-[#F89B2A] text-white font-normal px-8 sm:px-10 py-3 rounded-lg"
+          onClick={handleRestoreWallet}
+          disabled={loading}  // Disable button while loading
+        >
+          {loading ? "Restoring..." : "Import Wallet"}
+        </Button>
+      </div>
     </div>
   );
 };

@@ -11,8 +11,8 @@ import RegistrationForm from "@/forms/registration-form";
 import RestoreWallet from "@/components/restore-wallet";
 
 const Onboarding = () => {
-  const [isDialogOpen, setIsDialogOpen] = useState(false);
-  const [isRestore, setIsRestore] = useState(false);
+  const [isDialogOpen, setIsDialogOpen] = useState(false); 
+  const [isRestore, setIsRestore] = useState(false); // State to toggle between Create Wallet and Restore Wallet
 
   const handleCreateWallet = async () => {
     setIsDialogOpen(true);
@@ -32,6 +32,7 @@ const Onboarding = () => {
         A simple Bitcoin Wallet for your enjoyment
       </p>
 
+      {/* Show Create Wallet button if not restoring */}
       {!isRestore && (
         <Button
           className="bg-[#F89B2A] transition-all duration-300 py-4 sm:py-5 md:py-6 text-sm sm:text-lg md:text-[18px] rounded-xl shadow-lg hover:bg-[#f89b2adf] text-white font-normal px-12 sm:px-16 md:px-20"
@@ -41,13 +42,17 @@ const Onboarding = () => {
         </Button>
       )}
 
-      <small
-        className="text-[#F89B2A] text-[16px] sm:text-[18px] pt-4 sm:pt-5 cursor-pointer"
-        onClick={() => setIsRestore(!isRestore)}
-      >
-        {isRestore ? "Cancel Restore" : "Restore an existing wallet"}
-      </small>
+      {/* Only show this when restoring an existing wallet */}
+      {!isRestore && (
+        <small
+          className="text-[#F89B2A] text-[16px] sm:text-[18px] pt-4 sm:pt-5 cursor-pointer"
+          onClick={() => setIsRestore(true)} // Toggle to start restore process
+        >
+          Restore an existing wallet
+        </small>
+      )}
 
+      {/* Show RestoreWallet component only if isRestore is true */}
       {isRestore && <RestoreWallet />}
 
       <p className="pt-8 sm:pt-10 md:pt-12 text-[18px] sm:text-[20px] text-center md:text-left">
