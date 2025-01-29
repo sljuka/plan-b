@@ -4,11 +4,14 @@ import BitcoinBalance from "@/components/bitcoin-balance";
 import useWalletInfo from "@/hooks/get-wallet";
 import { useNavigate } from "react-router-dom";
 import useLogout from "@/hooks/logout";
+import { useState } from "react";
+import { Switch } from "@/components/ui/switch";
 
 export default function Home() {
   const mutation = useLogout();
   const navigate = useNavigate();
   const { data: walletInfo } = useWalletInfo();
+  const [view, setView] = useState("SAT");
 
   if (!walletInfo) {
     return <div className="min-h-screen bg-black">Loading...</div>;
@@ -35,8 +38,8 @@ export default function Home() {
 
         <main className="space-y-12">
           <section>
-            <h2 className="text-xl mb-6 font-light">Current Balance</h2>
-            <BitcoinBalance balance={walletInfo.balance} />
+            <h2 className="flex items-center gap-4 text-xl mb-6 font-light">Current Balance <span className='flex gap-2'><span className='text-sm text-gray-300'>SAT</span><Switch onCheckedChange={() => setView((v) => v === 'BTC' ? 'SAT' : 'BTC')} /><span className='text-sm text-gray-300'>BTC</span></span></h2>
+            <BitcoinBalance view={view} balance={walletInfo.balance} />
           </section>
 
           <section className="block">

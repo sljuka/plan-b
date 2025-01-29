@@ -1,7 +1,10 @@
 /* eslint-disable react/prop-types */
 
-export default function BitcoinBalance({ balance }) {
+import { toSats } from "@/utils/sats";
+
+export default function BitcoinBalance({ balance, view }) {
   // Convert from msatoshis to BTC and format with 8 decimal places
+
   const formattedBalance = (balance / 100000000000).toFixed(8); // Convert from msatoshis to BTC
   const [whole, decimal] = formattedBalance.split(".");
 
@@ -17,7 +20,6 @@ export default function BitcoinBalance({ balance }) {
 
   // Function to grey out zero digits, including the first zero
   const greyOutZeroes = (decimalPart) => {
-    console.log('AAA', decimalPart, typeof decimalPart)
     return decimalPart.split("").map((char, index) => {
       if (char === "0") {
         return <span className="text-gray-500" key={index}>{char}</span>; // Grey out zeroes
@@ -33,12 +35,18 @@ export default function BitcoinBalance({ balance }) {
   return (
     <div className="bg-gradient-to-br from-gray-900 to-black p-4 md:p-8 rounded-2xl w-full shadow-lg border border-white/10">
       <div className="text-center font-mono text-xl md:text-4xl tracking-wider">
-        <span className="text-[#F89B2A] mr-2">₿</span>
-        <span className="text-white">{formattedWhole}</span>
-        <span className="text-white">.</span>
-        <span className="text-white">
-          {greyOutZeroes(formattedDecimal)}
-        </span>
+        {view === 'BTC' ? (
+          <>
+            <span className="text-[#F89B2A] mr-2">₿</span>
+            <span className="text-white">{formattedWhole}</span>
+            <span className="text-white">.</span>
+            <span className="text-white">
+              {greyOutZeroes(formattedDecimal)}
+            </span>
+          </>
+        ) : (
+          <span className="flex justify-center gap-2">{toSats(balance)}<span className='text-[#F89B2A]'>sats</span></span>
+        )}
       </div>
     </div>
   );
