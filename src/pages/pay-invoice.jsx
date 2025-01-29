@@ -4,6 +4,7 @@ import { useState } from "react";
 
 export const PayInvoice = () => {
   const [destination, setDestination] = useState("");
+  const [amount, setAmount] = useState(0);
   const mutationInvoice = payInvoice();
   const mutationLnurl = usePayLnurl();
 
@@ -20,9 +21,16 @@ export const PayInvoice = () => {
         placeholder="invoice"
         onChange={(e) => setDestination(e.target.value)}
       />
+      <input
+        type="number"
+        placeholder="Amount"
+        onChange={(e) => setAmount(e.target.value)}
+      />
       <button
         onClick={() => {
-          if (destination.includes("@")) mutationLnurl.mutate(destination);
+          //todo if an lnurl, show a modal to choose the amount to send
+          if (destination.includes("@"))
+            mutationLnurl.mutate({ lnurl: destination, amount });
           else mutationInvoice.mutate(destination);
         }}
       >

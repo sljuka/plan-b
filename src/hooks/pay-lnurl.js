@@ -10,7 +10,7 @@ const usePayLnurl = () => {
   const mutation = usePayInvoice();
 
   return useMutation({
-    mutationFn: async ({ amount, lnurl }) => {
+    mutationFn: async ({ lnurl, amount }) => {
       const response = await axios.get(`${BASE_URL}${"/api/v1/lnurlscan/"}${lnurl}`,
         {
           headers: {
