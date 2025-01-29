@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
@@ -6,13 +7,12 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
-import { useState } from "react";
 import RegistrationForm from "@/forms/registration-form";
 import RestoreWallet from "@/components/restore-wallet";
+import Terms from "@/components/wallet-creation/terms";
+import WalletHandle from "@/components/wallet-creation/wallet-handle";
 
 const Onboarding = () => {
-  const [isDialogOpen, setIsDialogOpen] = useState(false); 
-  const [isRestore, setIsRestore] = useState(false); // State to toggle between Create Wallet and Restore Wallet
 
   const handleCreateWallet = async () => {
     setIsDialogOpen(true);
@@ -60,14 +60,17 @@ const Onboarding = () => {
       </p>
 
       <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
-        <DialogContent className="max-w-[75%] md:max-w-[55%] lg:max-w-[45%] xl:max-w-[45%] mx-auto rounded-lg">
+        <DialogContent className="max-w-[85%] md:max-w-[55%] lg:max-w-[45%] xl:max-w-[45%] mx-auto rounded-lg">
           <DialogHeader>
-            <DialogTitle>Create wallet</DialogTitle>
-            <DialogDescription>
-              Anyone who has this link will be able to view this.
-            </DialogDescription>
+            <DialogTitle></DialogTitle>
+            <DialogDescription></DialogDescription>
           </DialogHeader>
-          <RegistrationForm />
+
+          {step === "terms" && <Terms onNext={handleNext} />}
+
+          {step === "form" && <RegistrationForm onNext={handleNext} />}
+
+          {step === "wallet-created" && <WalletHandle />}
         </DialogContent>
       </Dialog>
     </div>

@@ -7,13 +7,12 @@ const useCreateInvoice = () => {
   const currentUser = useCurrentUser();
 
   return useMutation({
-    mutationFn: async (amount, description = "", expiry = 3600) => {
+    mutationFn: async ({ amount, memo }) => {
       const payload = {
         out: false,
         amount: amount,
         unit: "sat",
-        memo: description,
-        expiry: expiry,
+        memo: memo ? memo : ""
       };
 
       if (!currentUser) return null;

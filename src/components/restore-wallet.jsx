@@ -15,17 +15,6 @@ const RestoreWallet = () => {
       alert("Please enter a valid wallet ID");
       return;
     }
-
-    setLoading(true);  // Set loading state to true during restore process
-    try {
-      await mutateAsync(walletId);  // Call the restore API
-      navigate("/home");  // Redirect after successful wallet restore
-    } catch (error) {
-      console.error("Failed to restore wallet", error);
-      alert("An error occurred while restoring the wallet.");
-    } finally {
-      setLoading(false);  // Reset loading state when process is done
-    }
   };
 
   return (

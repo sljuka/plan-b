@@ -20,6 +20,10 @@ export const useRestoreWallet = () => {
       //bug if the wallet exixsts, all wallets are visible to all users
       const wallet = response.data.find((w) => w.id === walletId);
 
+      if (!wallet) {
+        throw new Error("Wallet not found");
+      }
+
       const userData = {
         walletId: wallet.id,
         adminKey: wallet.adminkey,

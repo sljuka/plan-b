@@ -1,11 +1,12 @@
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import useCreateWallet from "@/hooks/create-wallet";
-import { useNavigate } from "react-router-dom";
+import { Wallet } from "lucide-react";
 import { Formik, Form, Field, ErrorMessage } from "formik";
 import * as Yup from "yup";
+import PropTypes from "prop-types";
 
-const RegistrationForm = () => {
+const RegistrationForm = ({ onNext }) => {
   const validationSchema = Yup.object({
     name: Yup.string()
       .required("Name cannot be empty.")
@@ -14,52 +15,76 @@ const RegistrationForm = () => {
   });
 
   const { mutateAsync, isPending } = useCreateWallet();
-  const navigate = useNavigate();
-
+  /*   const navigate = useNavigate();
+   */
   const handleSubmit = (values) => {
     mutateAsync(values.name).then(() => {
-      navigate("/home");
+      /* navigate("/home"); */
+      onNext();
     });
   };
 
   return (
-    <Formik
-      initialValues={{ name: "" }}
-      validationSchema={validationSchema}
-      onSubmit={handleSubmit}
-    >
-      {() => (
-        <Form>
-          <div>
-            <label htmlFor="name" className="text-sm font-medium">
-              Name
-            </label>
-            <Field
-              as={Input}
-              type="text"
-              id="name"
-              name="name"
-              placeholder="Enter your name"
-              className="my-2 group-data-[invalid=true]/field:border-destructive focus-visible:group-data-[invalid=true]/field:ring-destructive"
-            />
-            <ErrorMessage
-              name="name"
-              component="p"
-              className="text-destructive text-sm mt-2 mb-2"
-            />
-            <Button
-              type="submit"
-              variant="secondary"
-              className="my-2 transition-all md:w-auto w-full duration-300 rounded-xl shadow-lg hover:bg-[#f89b2adf] font-normal"
-              disabled={isPending}
-            >
-              {isPending ? "Submitting..." : "Submit"}
-            </Button>
-          </div>
-        </Form>
-      )}
-    </Formik>
+    <div className="flex items-center justify-center">
+      <div className="w-full max-w-xl rounded-lg shadow-lg">
+        <Formik
+          initialValues={{ name: "" }}
+          validationSchema={validationSchema}
+          onSubmit={handleSubmit}
+        >
+          {() => (
+            <Form className="flex flex-col text-center">
+              <div className="flex justify-center">
+                <div className="rounded-full bg-[#7a7a7ab9] p-4">
+                  <Wallet className="w-6 h-6 text-white" />
+                </div>
+              </div>
+
+              <h1 className="text-xl md:text-2xl font-bold mt-6">
+                Create a Lightning Network wallet
+              </h1>
+              <p className="text-gray-400 pt-2 text-sm md:text-lg">
+                We will use your name to identify your LN wallet and your
+                digital assets.
+              </p>
+
+              <div className="pt-4 text-left">
+                <label htmlFor="name" className="text-sm font-medium">
+                  Name
+                </label>
+                <Field
+                  as={Input}
+                  type="text"
+                  id="name"
+                  name="name"
+                  placeholder="Enter your name"
+                  className="mt-2"
+                />
+                <ErrorMessage
+                  name="name"
+                  component="p"
+                  className="text-destructive text-sm mt-2"
+                />
+              </div>
+
+              <Button
+                type="submit"
+                variant="secondary"
+                className="mt-6 transition-all w-full duration-300 rounded-xl shadow-lg hover:bg-[#f89b2adf] font-normal"
+                disabled={isPending}
+              >
+                {isPending ? "Submitting..." : "Submit"}
+              </Button>
+            </Form>
+          )}
+        </Formik>
+      </div>
+    </div>
   );
 };
 
 export default RegistrationForm;
+
+RegistrationForm.propTypes = {
+  onNext: PropTypes.func.isRequired,
+};

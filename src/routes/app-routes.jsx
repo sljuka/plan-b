@@ -9,6 +9,7 @@ import { Protected } from "@/lib/protected";
 import { Public } from "@/lib/public";
 import { Invoice } from "@/components/invoice";
 import Test from "@/pages/test";
+import { Backup } from "@/pages/backup";
 
 const AppRoutes = () => {
   return (
@@ -43,6 +44,14 @@ const AppRoutes = () => {
           element={
             <Protected>
               <Home />
+            </Protected>
+          }
+        />
+        <Route
+          path="/backup"
+          element={
+            <Protected>
+              <Backup />
             </Protected>
           }
         />

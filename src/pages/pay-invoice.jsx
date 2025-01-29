@@ -1,13 +1,17 @@
 import payInvoice from "@/hooks/pay-invoice";
+import usePayLnurl from "@/hooks/pay-lnurl";
 import { useState } from "react";
 
 export const PayInvoice = () => {
-  const [invoice, setInvoice] = useState("");
-  const { data: payinvoice, loading, error, mutate } = payInvoice();
+  const [destination, setDestination] = useState("");
+  const [amount, setAmount] = useState(0);
+  const mutationInvoice = payInvoice();
+  const mutationLnurl = usePayLnurl();
 
-  if (error) return <div>Error {error?.response?.data?.detail}</div>;
+  if (mutationInvoice.error)
+    return <div>Error {mutationInvoice.error?.response?.data?.detail}</div>;
 
-  if (loading) return <div>Loading</div>;
+  if (mutationInvoice.loading) return <div>Loading</div>;
 
   return (
     <div className="pt-4 flex gap-4 flex-col">
@@ -15,10 +19,27 @@ export const PayInvoice = () => {
       <input
         type="text"
         placeholder="invoice"
-        onChange={(e) => setInvoice(e.target.value)}
+        onChange={(e) => setDestination(e.target.value)}
       />
-      <button onClick={() => mutate(invoice)}>Pay</button>
-      <span>Payment Hash: {payinvoice?.checking_id}</span>
+      <input
+        type="number"
+        placeholder="Amount"
+        onChange={(e) => setAmount(e.target.value)}
+      />
+      <button
+        onClick={() => {
+          //todo if an lnurl, show a modal to choose the amount to send
+          if (destination.includes("@"))
+            mutationLnurl.mutate({ lnurl: destination, amount });
+          else mutationInvoice.mutate(destination);
+        }}
+      >
+        Pay
+      </button>
+      <span>
+        Payment Hash:{" "}
+        {mutationInvoice.data?.checking_id ?? mutationLnurl.data?.checking_id}
+      </span>
     </div>
   );
 };
