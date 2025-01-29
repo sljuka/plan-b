@@ -12,6 +12,7 @@ import {
 } from "@/components/ui/dialog";
 import confetti from "canvas-confetti";
 import { useNavigate } from "react-router-dom";
+import { toSats } from "@/utils/sats";
 
 const InvoiceSummary = ({ invoice }) => {
   const { mutateAsync } = usePayInvoice();
@@ -26,7 +27,13 @@ const InvoiceSummary = ({ invoice }) => {
       spread: 70,
       origin: { y: 0.6 },
     });
+
     setDialogOpen(true);
+  };
+
+  const handleCloseDialog = () => {
+    setDialogOpen(false);
+    navigate("/home"); // Redirect to /home when dialog is closed
   };
 
   return (
@@ -45,9 +52,9 @@ const InvoiceSummary = ({ invoice }) => {
           <div className="border-b border-zinc-800 pb-4">
             <div className="text-sm text-zinc-400">Amount</div>
             <div className="flex justify-between items-center mt-1">
-              <div className="text-xl">{data?.amount_msat} sats</div>
+              <div className="text-xl">{toSats(data?.amount_msat)} sats</div>
               <div className="flex items-center text-zinc-400">
-                $1.98
+                {/* $1.98 */}
                 <ArrowUpDown className="w-4 h-4 ml-1" />
               </div>
             </div>
@@ -69,7 +76,7 @@ const InvoiceSummary = ({ invoice }) => {
 
           <div className="border-b border-zinc-800 pb-4">
             <div className="text-sm text-zinc-400">Date</div>
-            <div className="text-zinc-300 mt-1">{data?.date}</div>
+            <div className="text-zinc-300 mt-1">{new Date(data?.date * 1000).toLocaleString()}</div>
           </div>
 
           <div className="border-b border-zinc-800 pb-4">
@@ -87,7 +94,7 @@ const InvoiceSummary = ({ invoice }) => {
         </Button>
       </div>
 
-      <Dialog open={isDialogOpen} onOpenChange={setDialogOpen}>
+      <Dialog open={isDialogOpen} onOpenChange={handleCloseDialog}>
         <DialogContent>
           <DialogHeader>
             <DialogTitle>Payment Sent</DialogTitle>
