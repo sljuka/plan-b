@@ -17,10 +17,11 @@ const Onboarding = () => {
   const [isRestore, setIsRestore] = useState(false); // State for restore process
   const [step, setStep] = useState("terms"); // State for form step
 
-
   const handleCreateWallet = async () => {
     setIsDialogOpen(true);
   };
+
+  // Handle next step in the onboarding process
   const handleNext = () => {
     if (step === "terms") {
       setStep("form");
@@ -28,7 +29,7 @@ const Onboarding = () => {
       setStep("wallet-created");
     }
   };
-  
+
   return (
     <div className="min-h-screen bg-black flex flex-col justify-center items-center text-white px-4 sm:px-6">
       <img
@@ -73,14 +74,13 @@ const Onboarding = () => {
       <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
         <DialogContent className="max-w-[85%] md:max-w-[55%] lg:max-w-[45%] xl:max-w-[45%] mx-auto rounded-lg">
           <DialogHeader>
-            <DialogTitle></DialogTitle>
-            <DialogDescription></DialogDescription>
+            <DialogTitle>Create Wallet</DialogTitle>
+            <DialogDescription>Setup your new wallet.</DialogDescription>
           </DialogHeader>
 
+          {/* Conditional rendering of different steps */}
           {step === "terms" && <Terms onNext={handleNext} />}
-
           {step === "form" && <RegistrationForm onNext={handleNext} />}
-
           {step === "wallet-created" && <WalletHandle />}
         </DialogContent>
       </Dialog>
