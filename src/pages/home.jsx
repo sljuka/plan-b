@@ -1,9 +1,11 @@
-import { ArrowDownLeft, ArrowUpRight, Activity } from "lucide-react";
+import { ArrowDownLeft, ArrowUpRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import BitcoinBalance from "@/components/bitcoin-balance";
 import useWalletInfo from "@/hooks/get-wallet";
 import { useNavigate } from "react-router-dom";
 import useLogout from "@/hooks/logout";
+import { TsxSection } from "@/components/txs-section";
+import { Tsxs } from "@/components/tsxs";
 
 export default function Home() {
   const mutation = useLogout();
@@ -45,7 +47,7 @@ export default function Home() {
               <Button
                 variant="secondary"
                 className="flex-1 transition-all duration-300 py-4 sm:py-6 text-lg rounded-xl shadow-lg text-[16px] sm:text-[18px] hover:bg-[#f89b2adf] text-white font-normal sm:px-20"
-                onClick={() => navigate('/receive')}
+                onClick={() => navigate("/receive")}
               >
                 <ArrowDownLeft className="mr-2 h-5 sm:h-6 w-5 sm:w-6" /> Receive
               </Button>
@@ -57,16 +59,9 @@ export default function Home() {
               </Button>
             </div>
           </section>
-
-          <section>
-            <h2 className="text-xl mb-6 font-light">Recent Transactions</h2>
-            <div className="bg-gradient-to-br from-gray-900 to-black rounded-xl p-6 shadow-lg border border-white/10">
-              <div className="flex items-center justify-center text-white/50">
-                <Activity className="h-6 w-6 mr-2" />
-                <p>No recent transactions</p>
-              </div>
-            </div>
-          </section>
+          <TsxSection>
+            <Tsxs />
+          </TsxSection>
         </main>
       </div>
     </div>
