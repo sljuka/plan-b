@@ -1,68 +1,49 @@
-import { useState } from "react"
-import { ArrowLeft, Download, Share, Copy } from "lucide-react"
-import QRCode from "react-qr-code"
+import { useState } from "react";
+import { ArrowLeft, Download, Copy, ArrowLeftIcon } from "lucide-react";
+import QRCode from "react-qr-code";
+import useCreateInvoice from "@/hooks/create-invoice";
+import { shortStr } from "@/utils/shortStr";
+import { useNavigate } from "react-router-dom";
 
 export default function BtcBoard() {
-  const [amount, setAmount] = useState("0")
-  const [step, setStep] = useState("amount")
+  const [amount, setAmount] = useState("0");
+  const [step, setStep] = useState("amount");
+  const [memo, setMemo] = useState("");
+  const [invoice, setInvoice] = useState(null);
+  const navigate = useNavigate();
+
+  const { mutateAsync, isPending } = useCreateInvoice();
 
   const handleNumberClick = (num) => {
     if (amount === "0") {
-      setAmount(num)
+      setAmount(num);
     } else {
-      setAmount(amount + num)
+      setAmount(amount + num);
     }
-  }
+  };
 
   const handleBackspace = () => {
     if (amount.length > 1) {
-      setAmount(amount.slice(0, -1))
+      setAmount(amount.slice(0, -1));
     } else {
-      setAmount("0")
+      setAmount("0");
     }
-  }
+  };
 
   const formatSats = (num) => {
-    const parts = []
-    let temp = num
+    const parts = [];
+    let temp = num;
     while (temp.length > 0) {
-      parts.unshift(temp.slice(-3))
-      temp = temp.slice(0, -3)
+      parts.unshift(temp.slice(-3));
+      temp = temp.slice(0, -3);
     }
-    return parts.join(" ")
-  }
-
-  const handleShare = async () => {
-    try {
-      const canvas = document.querySelector("canvas")
-      if (canvas) {
-        const blob = await new Promise((resolve) => canvas.toBlob(resolve))
-        if (blob) {
-          await navigator.share({
-            files: [new File([blob], "qr-code.png", { type: "image/png" })],
-          })
-        }
-      }
-    } catch (error) {
-      console.error("Error sharing:", error)
-    }
-  }
+    return parts.join(" ");
+  };
 
   const handleCopy = () => {
     // Add copy functionality
-    console.log("Copy QR data")
-  }
-
-  const handleSaveImage = async () => {
-    const canvas = document.querySelector("canvas")
-    if (canvas) {
-      const image = canvas.toDataURL("image/png")
-      const link = document.createElement("a")
-      link.href = image
-      link.download = "qr-code.png"
-      link.click()
-    }
-  }
+    invoice && navigator.clipboard.writeText(invoice);
+  };
 
   return (
     <div className="h-screen bg-black text-white flex items-center justify-center p-4">
@@ -72,12 +53,20 @@ export default function BtcBoard() {
             <Download className="w-5 h-5" />
           </div>
           <h1 className="text-lg font-medium">Receive bitcoin</h1>
-          <div className="text-xl font-mono mt-1">{formatSats(amount)} sats</div>
+          <div className="text-xl font-mono mt-1">
+            {formatSats(amount)} sats
+          </div>
         </div>
 
         {step === "amount" ? (
-          <>
-            <div className="text-center text-zinc-500 mb-3 text-sm">Enter amount...</div>
+          <div className="flex flex-col gap-2">
+            <input
+              type="text"
+              placeholder="Description"
+              value={memo}
+              className="w-full h-10 bg-zinc-900 border border-zinc-800 rounded-lg px-3 text-sm"
+              onChange={(e) => setMemo(e.target.value)}
+            />
             <div className="grid grid-cols-3 gap-2 mb-3">
               {[1, 2, 3, 4, 5, 6, 7, 8, 9].map((num) => (
                 <button
@@ -101,56 +90,59 @@ export default function BtcBoard() {
                 <ArrowLeft className="w-5 h-5" />
               </button>
             </div>
+
             <button
-              onClick={() => setStep("qr")}
+              onClick={() =>
+                mutateAsync({ amount, memo }).then((invoice) => {
+                  setInvoice(invoice.payment_request);
+                  setStep("invoice");
+                })
+              }
+              disabled={isPending}
               className="w-full h-10 rounded-lg bg-[#F89B2A] hover:bg-[#e88d1f] text-black font-medium text-sm"
             >
-              Next
+              {isPending ? "Creating invoice" : "Next"}
             </button>
-          </>
+            <button
+              onClick={() => navigate("/home")}
+              className="w-full h-10 rounded-lg bg-white hover:bg-gray-100 text-black font-medium text-sm"
+            >
+              <span className="flex gap-2 justify-center">
+                <ArrowLeftIcon className="w-5 h-5" />
+                Cancel
+              </span>
+            </button>
+          </div>
         ) : (
-          <div className="space-y-3">
+          <div className="space-y-3 flex flex-col gap-2">
             <div className="bg-white p-3 rounded-lg">
-              <QRCode value={`bitcoin:?amount=${amount}`} className="w-full h-auto" />
+              <QRCode value={invoice && invoice} className="w-full h-auto" />
             </div>
-            <input
-              type="text"
-              placeholder="Description"
-              className="w-full h-10 bg-zinc-900 border border-zinc-800 rounded-lg px-3 text-sm"
-            />
+            <span className="w-full text-sm flex justify-between">
+              <span className="text-gray-400">invoice</span>{" "}
+              {invoice && shortStr(invoice)}
+            </span>
             <button
               onClick={handleCopy}
               className="w-full h-10 rounded-lg bg-[#F89B2A] hover:bg-[#e88d1f] text-black font-medium text-sm"
             >
-              Copy invoice
-            </button>
-            <div className="grid grid-cols-3 gap-3">
-              <button
-                onClick={handleShare}
-                className="flex flex-col items-center justify-center gap-1.5 py-2 px-3 rounded-lg bg-zinc-900 hover:bg-zinc-800 text-xs font-medium"
-              >
-                <Share className="w-5 h-5" />
-                Share
-              </button>
-              <button
-                onClick={handleCopy}
-                className="flex flex-col items-center justify-center gap-1.5 py-2 px-3 rounded-lg bg-zinc-900 hover:bg-zinc-800 text-xs font-medium"
-              >
+              <span className="flex gap-2 justify-center">
                 <Copy className="w-5 h-5" />
-                Copy
-              </button>
-              <button
-                onClick={handleSaveImage}
-                className="flex flex-col items-center justify-center gap-1.5 py-2 px-3 rounded-lg bg-zinc-900 hover:bg-zinc-800 text-xs font-medium"
-              >
-                <Download className="w-5 h-5" />
-                Save as image
-              </button>
-            </div>
+                Copy invoice
+              </span>
+            </button>
+            <button
+              onClick={() => setStep("amount")}
+              className="w-full h-10 rounded-lg bg-white hover:bg-gray-100 text-black font-medium text-sm"
+            >
+              <span className="flex gap-2 justify-center">
+                <ArrowLeftIcon className="w-5 h-5" />
+                Back
+              </span>
+            </button>
           </div>
         )}
       </div>
     </div>
-  )
+  );
 }
-
