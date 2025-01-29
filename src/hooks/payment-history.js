@@ -1,9 +1,10 @@
 import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
+import useCurrentUser from "./current-user";
 
 const usePaymentHistory = () => {
-  const API_KEY = import.meta.env.VITE_ADMIN_KEY;
   const BASE_URL = import.meta.env.VITE_BASE_URL;
+  const currentUser = useCurrentUser();
 
   return useQuery({
     queryKey: ["History"],
@@ -13,7 +14,7 @@ const usePaymentHistory = () => {
           limit: 10
         },
         headers: {
-          "X-Api-Key": API_KEY,
+          "X-Api-Key": currentUser.adminKey,
           "Content-Type": "application/json",
         },
       });

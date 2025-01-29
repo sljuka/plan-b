@@ -1,9 +1,10 @@
 import { useMutation } from "@tanstack/react-query";
 import axios from "axios";
+import useCurrentUser from "./current-user";
 
 const usePayInvoice = () => {
-  const API_KEY = import.meta.env.VITE_ADMIN_KEY;
   const BASE_URL = import.meta.env.VITE_BASE_URL;
+  const currentUser = useCurrentUser();
 
   return useMutation({
 
@@ -13,14 +14,14 @@ const usePayInvoice = () => {
         bolt11: invoice,
       }
 
-      console.log("qqq, ", playload)
-
-      const response = await axios.post(`${BASE_URL}${"/api/v1/payments"}`, playload, {
-        headers: {
-          "X-Api-Key": API_KEY,
-          "Content-Type": "application/json",
-        },
-      });
+      const response = await axios.post(`${BASE_URL}${"/api/v1/payments"}`,
+        playload,
+        {
+          headers: {
+            "X-Api-Key": currentUser.adminKey,
+            "Content-Type": "application/json",
+          },
+        });
 
       return response.data;
     },
