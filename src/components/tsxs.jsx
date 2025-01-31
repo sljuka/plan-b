@@ -22,6 +22,8 @@ export const Tsxs = () => {
       </div>
     );
 
+  console.log("SSS", data);
+
   return (
     <div className="flex flex-col gap-2 items-center justify-center ">
       {data.map((tx) => (
@@ -42,7 +44,7 @@ export const Tsxs = () => {
             {toSats(Math.abs(tx.amount))} SAT
           </span>
           <span className="text-white/50 w-48">
-            {new Date(tx.time * 1000).toLocaleString()}
+            {new Date(tx.time).toLocaleString()}
           </span>
         </div>
       ))}

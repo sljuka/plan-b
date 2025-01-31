@@ -14,8 +14,9 @@ export default function BtcBoard() {
   const [invoice, setInvoice] = useState(null);
   const navigate = useNavigate();
 
-  const { mutateAsync, isPending } = useCreateInvoice();
+  const { data, mutateAsync, isPending } = useCreateInvoice();
 
+  console.log("SSSS", data);
   const handleNumberClick = (num) => {
     if (amount === "0") {
       setAmount(num);
@@ -100,7 +101,7 @@ export default function BtcBoard() {
             <button
               onClick={() =>
                 mutateAsync({ amount, memo }).then((invoice) => {
-                  setInvoice(invoice.payment_request);
+                  setInvoice(invoice.bolt11);
                   setStep("invoice");
                 })
               }
