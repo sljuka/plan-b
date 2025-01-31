@@ -4,9 +4,11 @@ import QRCode from "react-qr-code";
 import useCreateInvoice from "@/hooks/create-invoice";
 import { shortStr } from "@/utils/shortStr";
 import { useNavigate } from "react-router-dom";
+import { useToast } from "@/hooks/use-toast";
 
 export default function BtcBoard() {
   const [amount, setAmount] = useState("0");
+  const { toast } = useToast();
   const [step, setStep] = useState("amount");
   const [memo, setMemo] = useState("");
   const [invoice, setInvoice] = useState(null);
@@ -41,8 +43,12 @@ export default function BtcBoard() {
   };
 
   const handleCopy = () => {
-    // Add copy functionality
     invoice && navigator.clipboard.writeText(invoice);
+
+    toast({
+      title: "Invoice copied to clipboard",
+      description: shortStr(invoice),
+    });
   };
 
   return (
