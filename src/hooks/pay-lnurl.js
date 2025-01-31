@@ -22,7 +22,7 @@ const usePayLnurl = () => {
       const callback_resp = await axios.get(`${response.data.callback}?amount=${toMsats(amount)}`);
       const payment = mutation.mutate(callback_resp.data.pr);
 
-      return payment.data;
+      return payment;
     },
   });
 };

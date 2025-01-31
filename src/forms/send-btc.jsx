@@ -5,20 +5,39 @@ import { Formik, Form, Field, ErrorMessage } from "formik";
 import { Button } from "@/components/ui/button";
 import InvoiceSummary from "@/components/invoice-summary";
 import { useNavigate } from "react-router-dom";
+import LnAddressSummary from "@/components/lnaddress-summary";
 
 const SendForm = () => {
   const validationSchema = Yup.object({
-    name: Yup.string()
-      .required("Name cannot be empty.")
-      .min(5, "Name cannot be less than 5 characters."),
+    address: Yup.string()
+      .required("Address cannot be empty.")
+      .min(5, "Address cannot be less than 5 characters."),
+    amount: Yup.number().when("isLightning", {
+      is: true, // Only apply validation for Lightning address
+      then: Yup.number().required("Amount is required for Lightning payments."),
+    }),
   });
-  const [step, setStep] = useState("invoice");
-  const [invoice, setInvoice] = useState();
+
+  const [step, setStep] = useState("input");
+  const [destination, setDestination] = useState();
+  const [amount, setAmount] = useState();
+  const [isInvoice, setIsInvoice] = useState(true);
   const navigate = useNavigate();
+
+  // Function to handle address change and detect if it's a Lightning address or LNURL
+  const handleAddressChange = (event) => {
+    const value = event.target.value;
+    if (value.includes("@")) {
+      setIsInvoice(false); // It's an LNURL address
+    } else {
+      setIsInvoice(true); // It's a Lightning address
+    }
+  };
 
   const handleSubmit = (values) => {
     setStep("summary");
-    setInvoice(values.name);
+    setDestination(values.address);
+    setAmount(values.amount);
   };
 
   return (
@@ -41,35 +60,59 @@ const SendForm = () => {
 
         <h1 className="text-xl font-medium text-center mt-6">Send bitcoin</h1>
 
-        {step === "invoice" && (
+        {step === "input" && (
           <section>
             <Formik
-              initialValues={{ name: "" }}
+              initialValues={{ address: "", amount: "" }}
               validationSchema={validationSchema}
               onSubmit={handleSubmit}
             >
-              {() => (
+              {({ handleChange }) => (
                 <Form className="flex flex-col text-center">
                   <div className="pt-4 text-left">
-                    <label htmlFor="name" className="text-sm font-medium">
+                    <label htmlFor="address" className="text-sm font-medium">
                       Destination
                     </label>
                     <div className="relative">
                       <Field
                         type="text"
-                        id="name"
-                        name="name"
+                        id="address"
+                        name="address"
                         placeholder="Address or Invoice"
                         className="w-full bg-transparent border-b border-zinc-800 rounded-none px-0 pb-2 focus:outline-none focus:border-zinc-600 placeholder:text-zinc-600"
+                        onChange={(e) => {
+                          handleChange(e);
+                          handleAddressChange(e);
+                        }}
                       />
                       <User className="w-5 h-5 text-zinc-600 absolute right-0 top-1/2 -translate-y-1/2" />
                     </div>
                     <ErrorMessage
-                      name="name"
+                      name="address"
                       component="p"
                       className="text-destructive text-sm mt-2"
                     />
                   </div>
+
+                  {!isInvoice && (
+                    <div className="pt-4 text-left">
+                      <label htmlFor="amount" className="text-sm font-medium">
+                        Amount (Sats)
+                      </label>
+                      <Field
+                        type="number"
+                        id="amount"
+                        name="amount"
+                        placeholder="Enter amount in sats"
+                        className="w-full bg-transparent border-b border-zinc-800 rounded-none px-0 pb-2 focus:outline-none focus:border-zinc-600 placeholder:text-zinc-600"
+                      />
+                      <ErrorMessage
+                        name="amount"
+                        component="p"
+                        className="text-destructive text-sm mt-2"
+                      />
+                    </div>
+                  )}
 
                   <Button
                     type="submit"
@@ -84,7 +127,13 @@ const SendForm = () => {
           </section>
         )}
 
-        {step === "summary" && <InvoiceSummary invoice={invoice} />}
+        {step === "summary" && isInvoice && (
+          <InvoiceSummary invoice={destination} />
+        )}
+
+        {step === "summary" && !isInvoice && (
+          <LnAddressSummary address={destination} amount={amount} />
+        )}
       </div>
     </div>
   );

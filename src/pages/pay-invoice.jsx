@@ -28,7 +28,7 @@ export const PayInvoice = () => {
       />
       <button
         onClick={() => {
-          //todo if an lnurl, show a modal to choose the amount to send
+          //todo if an lnurl, show a input to choose the amount to send
           if (destination.includes("@"))
             mutationLnurl.mutate({ lnurl: destination, amount });
           else mutationInvoice.mutate(destination);
