@@ -1,8 +1,6 @@
 /* eslint-disable react/prop-types */
 import { useState } from "react";
-import useDecodeInvoice from "@/hooks/decode-invoice";
-import usePayInvoice from "@/hooks/pay-invoice";
-import { User, ArrowUpDown } from "lucide-react";
+import { ArrowUpDown } from "lucide-react";
 import { Button } from "./ui/button";
 import {
   Dialog,
@@ -12,17 +10,15 @@ import {
 } from "@/components/ui/dialog";
 import confetti from "canvas-confetti";
 import { useNavigate } from "react-router-dom";
-import { toSats } from "@/utils/sats";
+import usePayLnurl from "@/hooks/pay-lnurl";
 
-const InvoiceSummary = ({ invoice }) => {
-  const { mutateAsync, error, isPending } = usePayInvoice();
-  const { data } = useDecodeInvoice(invoice);
+const LnAddressSummary = ({ address, amount }) => {
+  const { mutateAsync, error, isPending } = usePayLnurl();
   const [isDialogOpen, setDialogOpen] = useState(false);
   const navigate = useNavigate();
-  console.log(data);
 
-  const handleSendInvoice = async () => {
-    mutateAsync(invoice)
+  const handleSendLnurl = async () => {
+    mutateAsync({ lnurl: address, amount })
       .then(() => {
         confetti({
           particleCount: 100,
@@ -58,43 +54,30 @@ const InvoiceSummary = ({ invoice }) => {
           <div className="border-b border-zinc-800 pb-4">
             <div className="text-sm text-zinc-400">Amount</div>
             <div className="flex justify-between items-center mt-1">
-              <div className="text-xl">{toSats(data?.amount_msat)} sats</div>
+              <div className="text-xl">{amount} sats</div>
               <div className="flex items-center text-zinc-400">
-                {/* $1.98 */}
                 <ArrowUpDown className="w-4 h-4 ml-1" />
               </div>
             </div>
           </div>
 
           <div className="border-b border-zinc-800 pb-4">
-            <div className="text-sm text-zinc-400">To</div>
-            <div className="flex justify-between items-center mt-1">
-              <div className="text-zinc-300 text-ellipsis overflow-hidden">
-                {invoice.length > 14
-                  ? `${invoice.substring(0, 14)}...${invoice.substring(
-                      invoice.length - 14
-                    )}`
-                  : invoice}
-              </div>
-              <User className="w-5 h-5 text-zinc-600 ml-2 flex-shrink-0" />
-            </div>
-          </div>
-
-          <div className="border-b border-zinc-800 pb-4">
             <div className="text-sm text-zinc-400">Date</div>
             <div className="text-zinc-300 mt-1">
-              {new Date(data?.date * 1000).toLocaleString()}
+              {new Date().toLocaleString()}
             </div>
           </div>
 
           <div className="border-b border-zinc-800 pb-4">
             <div className="text-sm text-zinc-400">Description</div>
-            <div className="text-zinc-300 mt-1">{data?.description}</div>
+            <div className="text-zinc-300 mt-1">
+              Payment to {address.split("@")[0]}
+            </div>
           </div>
         </div>
 
         <Button
-          onClick={handleSendInvoice}
+          onClick={handleSendLnurl}
           variant="secondary"
           className="mt-6 transition-all w-full duration-300 rounded-xl shadow-lg hover:bg-[#f89b2adf] font-normal"
           disabled={isPending}
@@ -120,4 +103,4 @@ const InvoiceSummary = ({ invoice }) => {
   );
 };
 
-export default InvoiceSummary;
+export default LnAddressSummary;
