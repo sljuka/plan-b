@@ -4,9 +4,11 @@ import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Label } from "@/components/ui/label";
 import { useNavigate } from "react-router-dom";
+import { useToast } from "@/hooks/use-toast";
 
 export default function WalletHandle() {
   const [agreed, setAgreed] = useState(false);
+  const { toast } = useToast();
   const data = JSON.parse(localStorage.getItem("userData"))?.walletId;
   const walletId = data;
   const navigate = useNavigate();
@@ -31,12 +33,15 @@ export default function WalletHandle() {
         <div className="space-y-6 w-full text-center">
           <div className="flex flex-col justify-between items-center w-full">
             <div className="text-sm md:text-lg">
-              Wallet ID:{" "}
+              Wallet ID:
               <span
                 className="font-bold cursor-pointer"
                 onClick={() => {
                   navigator.clipboard.writeText(walletId);
-                  alert("Wallet ID copied: " + walletId);
+                  toast({
+                    title: "Wallet ID copied",
+                    description: walletId,
+                  });
                 }}
               >
                 {walletId}

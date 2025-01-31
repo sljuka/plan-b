@@ -40,7 +40,7 @@ const Onboarding = () => {
       <p className="text-[#CCCCCC] text-[16px] sm:text-[18px] md:text-[20px] py-4 md:py-6">
         Send & Receive Bitcoin
       </p>
-      <p className="pb-8 sm:pb-10 md:pb-14 text-center md:text-left">
+      <p className={`text-center md:text-left ${!isRestore ? 'pb-8' : ''}`}>
         A simple Bitcoin Wallet for your enjoyment
       </p>
 
@@ -50,7 +50,7 @@ const Onboarding = () => {
           className="bg-[#F89B2A] transition-all duration-300 py-4 sm:py-5 md:py-6 text-sm sm:text-lg md:text-[18px] rounded-xl shadow-lg hover:bg-[#f89b2adf] text-white font-normal px-12 sm:px-16 md:px-20"
           onClick={handleCreateWallet}
         >
-          Create a new wallet
+          Create Wallet
         </Button>
       )}
 
@@ -65,7 +65,7 @@ const Onboarding = () => {
       )}
 
       {/* Show RestoreWallet component only if isRestore is true */}
-      {isRestore && <RestoreWallet />}
+      {isRestore && <RestoreWallet setIsRestore={setIsRestore} />}
 
       <p className="pt-8 sm:pt-10 md:pt-12 text-[18px] sm:text-[20px] text-center md:text-left">
         Your Keys, Your Coins
